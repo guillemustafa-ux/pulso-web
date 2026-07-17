@@ -1,7 +1,8 @@
 // El guía del taller: agente IA que acompaña al visitante y responde sobre
 // los proyectos, la marca y el perfil creativo/laboral de Guille.
 // Motor: Google Gemini (nivel gratuito) — la key vive en la env GEMINI_API_KEY.
-const MODELO = 'gemini-2.0-flash';
+// OJO: el free tier 2026 vive en los modelos nuevos; gemini-2.0-flash da 429.
+const MODELO = 'gemini-flash-lite-latest';
 const MAX_MENSAJES = 12;
 const MAX_LARGO = 1000;
 
@@ -54,7 +55,9 @@ export default async function handler(req: any, res: any) {
     res.status(405).json({ error: 'método no permitido' });
     return;
   }
-  const key = process.env.GEMINI_API_KEY;
+  // limpieza obligada: al cargar la env por pipe en Windows puede quedar un
+  // \r o comillas colgando que rompen la URL de Google
+  const key = (process.env.GEMINI_API_KEY || '').trim().replace(/"/g, '');
   if (!key) {
     res.status(503).json({ error: 'el guía todavía no está despierto' });
     return;

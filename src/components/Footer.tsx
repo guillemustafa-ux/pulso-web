@@ -6,7 +6,7 @@ export default function Footer() {
     <footer className="cierre">
       <div className="wrap reveal">
         <Latido strokeWidth={8} className="mini-pulse" />
-        <p>El día a día sale en Instagram. Comentá, preguntá, meté mano.</p>
+        <p>El día a día sale en Instagram — pasate, comentá, preguntá, meté mano.</p>
         <a
           className="cta-ig"
           href="https://www.instagram.com/pulso.envozalta"

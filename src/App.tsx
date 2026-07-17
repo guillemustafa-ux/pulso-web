@@ -3,8 +3,13 @@ import Hero from './components/Hero';
 import Manifiesto from './components/Manifiesto';
 import Proyectos from './components/Proyectos';
 import Bitacora from './components/Bitacora';
+import Muro from './components/Muro';
 import Footer from './components/Footer';
 import AgujaCursor from './components/AgujaCursor';
+import Atril from './components/Atril';
+import PincelCapa from './components/PincelCapa';
+import LienzoModal from './components/LienzoModal';
+import { PincelProvider } from './lib/pincel';
 
 export default function App() {
   // apariciones/desapariciones al scrollear: .reveal gana .visible al entrar
@@ -25,17 +30,21 @@ export default function App() {
   }, []);
 
   return (
-    <>
+    <PincelProvider>
       <AgujaCursor />
+      <PincelCapa />
+      <Atril />
+      <LienzoModal />
       <div className="wrap">
         <Hero />
         <main>
           <Manifiesto />
           <Proyectos />
           <Bitacora />
+          <Muro />
         </main>
       </div>
       <Footer />
-    </>
+    </PincelProvider>
   );
 }

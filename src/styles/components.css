@@ -1,15 +1,25 @@
 /* Componentes — clases portadas de identidad-visual-pulso.html + capa responsive del sitio */
 
-/* ===== Latido (única animación del sitio: el trazo se dibuja una vez al cargar) ===== */
+/* ===== Latido vivo: nunca se queda quieto — su tempo sigue la actividad
+   del visitante (--latido-dur la ajusta Latido.tsx) ===== */
 .latido-animado path {
   stroke-dasharray: 100;
   stroke-dashoffset: 100;
-  animation: latir 0.8s ease-out 0.2s forwards;
+  animation: latir var(--latido-dur, 2.4s) ease-in-out infinite;
 }
 
 @keyframes latir {
-  to {
-    stroke-dashoffset: 0;
+  0% {
+    stroke-dashoffset: 100; /* entra dibujándose */
+  }
+  45% {
+    stroke-dashoffset: 0; /* trazo completo */
+  }
+  62% {
+    stroke-dashoffset: 0; /* respiro breve */
+  }
+  100% {
+    stroke-dashoffset: -100; /* se va hacia adelante, como un pulso que pasa */
   }
 }
 
@@ -21,28 +31,31 @@
 }
 
 /* ===== Hero / wordmark ===== */
-/* el hero vive cerca del medio de la pantalla, no pegado arriba (pedido Guille 16/07) */
+/* el hero vive cerca del medio de la pantalla, grande y centrado (pedido Guille 16-17/07) */
 .hero-zona {
   min-height: clamp(420px, 66vh, 760px);
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
 header.hero {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
   padding-bottom: clamp(24px, 4vw, 40px);
   border-bottom: 2px solid var(--tinta);
   margin-bottom: clamp(24px, 4vw, 40px);
-  flex-wrap: wrap;
+  width: 100%;
 }
 
 .hero-brand {
   display: flex;
   align-items: center;
+  justify-content: center;
   flex-wrap: wrap;
   gap: 4px 24px;
 }
@@ -50,7 +63,7 @@ header.hero {
 .wordmark {
   position: relative;
   display: inline-block;
-  font-size: clamp(56px, 14vw, 96px);
+  font-size: clamp(68px, 17vw, 124px);
   line-height: 1;
 }
 
@@ -82,20 +95,20 @@ header.hero {
 }
 
 .hero-meta {
-  text-align: right;
+  text-align: center;
 }
 
 .hero-bio {
   font-size: clamp(17px, 2.2vw, 19px);
   max-width: 640px;
-  margin: 0 0 20px;
+  margin: 0 auto 20px;
 }
 
 nav.ancla a {
   font-family: 'IBM Plex Mono', 'Cascadia Code', Consolas, monospace;
   font-size: 14px;
   text-decoration: none;
-  margin-right: 22px;
+  margin: 0 11px;
   border-bottom: 2px solid transparent;
   padding-bottom: 2px;
 }
@@ -654,6 +667,338 @@ footer.cierre .meta-mono {
   }
 
   .hilo-cursor {
+    display: none;
+  }
+}
+
+/* ===== El atril (arriba a la derecha) ===== */
+.atril {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  z-index: 80;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.atril-boton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--papel);
+  border: 1.5px solid var(--tinta);
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: var(--tinta);
+  box-shadow: 0 2px 0 rgba(34, 26, 18, 0.15);
+}
+
+.atril-boton svg {
+  width: 26px;
+  height: 26px;
+}
+
+.atril-label {
+  font-family: 'Caveat', 'Segoe Script', 'Segoe Print', cursive;
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--ember);
+}
+
+.atril-panel {
+  background: var(--papel);
+  border: 1.5px solid var(--tinta);
+  border-radius: 10px;
+  padding: 14px;
+  width: 240px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 3px 0 rgba(34, 26, 18, 0.15);
+}
+
+.atril-huella {
+  background: var(--ember);
+  color: var(--crema);
+  border: none;
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-family: 'IBM Plex Mono', 'Cascadia Code', Consolas, monospace;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.atril-toggle {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-family: 'Shantell Sans', 'Segoe Print', cursive;
+  font-size: 13.5px;
+  line-height: 1.4;
+}
+
+.atril-toggle input {
+  accent-color: var(--ember);
+  margin-top: 2px;
+}
+
+.atril-titulo {
+  font-family: 'IBM Plex Mono', 'Cascadia Code', Consolas, monospace;
+  font-size: 11px;
+  opacity: 0.65;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.atril-grupo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.atril-swatches {
+  display: flex;
+  gap: 8px;
+}
+
+.swatch {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  outline: 1px solid var(--borde);
+}
+
+.swatch.elegido {
+  border-color: var(--papel);
+  outline: 2px solid var(--tinta);
+}
+
+.atril-opciones {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.atril-opciones button {
+  font-family: 'IBM Plex Mono', 'Cascadia Code', Consolas, monospace;
+  font-size: 12px;
+  padding: 4px 10px;
+  border: 1px solid var(--borde);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--tinta);
+}
+
+.atril-opciones button.elegido {
+  border-color: var(--ember);
+  color: var(--ember);
+  font-weight: 700;
+}
+
+/* ===== Modo pincel: capas de pintura sobre la página ===== */
+.pincel-capa {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 55;
+}
+
+body.modo-pincel {
+  cursor:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='30'><path d='M4 26 Q3 22 7 21 L10 24 Q9 28 4 26Z' fill='%23FF5B35'/><line x1='10' y1='21' x2='24' y2='6' stroke='%23221A12' stroke-width='3' stroke-linecap='round'/><line x1='24' y1='6' x2='27' y2='3' stroke='%23A98E5F' stroke-width='3.4' stroke-linecap='round'/></svg>")
+      4 26,
+    auto;
+}
+
+/* ===== Lienzo del atril (modal) ===== */
+.lienzo-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(34, 26, 18, 0.55);
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.lienzo-caja {
+  background: var(--papel);
+  border: 2px solid var(--tinta);
+  border-radius: 10px;
+  padding: 18px;
+  max-width: 540px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 4px 0 rgba(34, 26, 18, 0.25);
+}
+
+.lienzo-titulo {
+  font-family: 'Shantell Sans', 'Segoe Print', cursive;
+  margin: 0;
+  font-size: 16px;
+}
+
+.lienzo-canvas {
+  width: 100%;
+  border: 1.5px solid var(--tinta);
+  border-radius: 4px;
+  touch-action: none;
+  cursor: crosshair;
+  background: #fdfbf3;
+}
+
+.lienzo-herramientas {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lienzo-acciones {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.lienzo-acciones button {
+  font-family: 'IBM Plex Mono', 'Cascadia Code', Consolas, monospace;
+  font-size: 13px;
+  padding: 8px 14px;
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--tinta);
+}
+
+.lienzo-acciones .lienzo-enviar {
+  background: var(--ember);
+  color: var(--crema);
+  border: none;
+  font-weight: 700;
+}
+
+.lienzo-acciones .lienzo-enviar:disabled {
+  opacity: 0.5;
+}
+
+.lienzo-error {
+  font-family: 'IBM Plex Mono', 'Cascadia Code', Consolas, monospace;
+  font-size: 12px;
+  color: var(--ember);
+}
+
+.lienzo-gracias {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+  font-family: 'Shantell Sans', 'Segoe Print', cursive;
+}
+
+.lienzo-gracias p {
+  margin: 0;
+}
+
+.lienzo-cerrar {
+  font-family: 'IBM Plex Mono', 'Cascadia Code', Consolas, monospace;
+  font-size: 13px;
+  padding: 8px 14px;
+  border: 1px solid var(--tinta);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--tinta);
+}
+
+/* ===== El muro de los que pasan ===== */
+.muro-intro {
+  font-family: 'Shantell Sans', 'Segoe Print', cursive;
+  max-width: 640px;
+  margin: 0 0 6px;
+}
+
+.muro-disclaimer {
+  font-family: 'IBM Plex Mono', 'Cascadia Code', Consolas, monospace;
+  font-size: 12.5px;
+  opacity: 0.7;
+  max-width: 640px;
+  margin: 0 0 18px;
+}
+
+.muro-vacio {
+  background: transparent;
+  border: 2px dashed rgba(34, 26, 18, 0.35);
+  border-radius: 8px;
+  padding: 28px;
+  width: 100%;
+  text-align: center;
+}
+
+.muro-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 180px), 1fr));
+  gap: 18px;
+}
+
+.muro-huella {
+  position: relative;
+  margin: 0;
+  background: #fdfbf3;
+  border: 1.5px solid var(--tinta);
+  border-radius: 4px;
+  padding: 6px 6px 4px;
+  box-shadow: 0 2px 0 rgba(34, 26, 18, 0.15);
+}
+
+.muro-grid > .muro-huella:nth-child(odd) {
+  transform: rotate(-1deg);
+}
+
+.muro-grid > .muro-huella:nth-child(even) {
+  transform: rotate(0.8deg);
+}
+
+.muro-huella img {
+  width: 100%;
+  border-radius: 2px;
+}
+
+.muro-huella figcaption {
+  font-size: 10px;
+  padding-top: 3px;
+  text-align: right;
+}
+
+.muro-borrar {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: none;
+  background: var(--ember);
+  color: var(--crema);
+  font-weight: 700;
+}
+
+.muro-total {
+  margin-top: 14px;
+}
+
+@media (max-width: 640px) {
+  .atril {
+    top: 10px;
+    right: 10px;
+  }
+
+  .atril-label {
     display: none;
   }
 }

@@ -15,8 +15,8 @@ export default function Hero() {
         </div>
       </header>
       <p className="hero-bio">
-        Armo apps, bots y lo que se me cruce — con mi equipo de IA. Todo el proceso, sin pulir.
-        Sumate.
+        Armo apps, bots y lo que se me cruce, con mi equipo de IA. Entrá y mirá el proceso, tal
+        como va, sin pulir.
       </p>
       <nav className="ancla" aria-label="Secciones">
         <a href="#manifiesto">manifiesto</a>

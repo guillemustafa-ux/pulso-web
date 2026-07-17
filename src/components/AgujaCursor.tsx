@@ -1,7 +1,9 @@
 import { useEffect, useRef } from 'react';
+import { usePincel } from '../lib/pincel';
 
 // El mouse cose la gran tela: puntadas de hilo ember que siguen al cursor y se
 // desvanecen. Solo con puntero fino (desktop) y sin prefers-reduced-motion.
+// Con el modo pincel activo la aguja descansa — pinta el pincel.
 type Punto = { x: number; y: number; t: number };
 
 const VIDA_MS = 900; // cuánto vive cada puntada antes de desvanecerse
@@ -9,6 +11,7 @@ const LARGO_PUNTADA = 14; // px entre puntadas — costura, no trazo continuo
 
 export default function AgujaCursor() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { modoPincel } = usePincel();
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -62,7 +65,8 @@ export default function AgujaCursor() {
       window.removeEventListener('mousemove', mover);
       window.removeEventListener('resize', ajustar);
     };
-  }, []);
+  }, [modoPincel]);
 
+  if (modoPincel) return null;
   return <canvas ref={canvasRef} className="hilo-cursor" aria-hidden="true" />;
 }

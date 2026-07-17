@@ -103,6 +103,20 @@ desktop (1280) + mobile (390). Chequear siempre: latido clavado sobre "ul", turq
   actividad del visitante (2.4s en reposo → 0.55s a full). La aguja descansa mientras el
   pincel está activo.
 
+## v2.3 — el maestro del taller (17/07/2026)
+
+- **Guía acompañante** (`Guia.tsx`, fijo abajo del Atril): latido tenue que aparece al
+  scrollear, sugiere según la sección visible (IntersectionObserver) y abre el chat.
+- **Agente IA** (`api/guia.ts`): persona de "viejo maestro pintor de época" que acompaña la
+  aventura (visitante + creaciones programáticas de Guille). Motor: **Google Gemini nivel
+  gratuito** (`gemini-2.0-flash`, env `GEMINI_API_KEY` — pendiente de que Guille la cree en
+  aistudio.google.com y la cargue en Vercel; hasta entonces responde 503 amigable).
+  Prompt dictaminado apto por el guardián con 5 ajustes aplicados: "tracker educativo, sin
+  plata real", modo afirmativo, nunca pedir datos sensibles, nunca firmar la obra como
+  propia (es de Guille + agentes), y transparencia total si le preguntan si es IA.
+  Cupo 10 preguntas/día por navegador. OJO: las fichas de proyectos están INLINE en
+  api/guia.ts (la función no puede importar de src/) — mantener en sync con proyectos.ts.
+
 ## Deploy (17/07/2026)
 
 - Repo público: `https://github.com/guillemustafa-ux/pulso-web` (build in public).

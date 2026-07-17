@@ -1,5 +1,3 @@
-import { proyectos } from '../src/content/proyectos';
-
 // El guía del taller: agente IA que acompaña al visitante y responde sobre
 // los proyectos, la marca y el perfil creativo/laboral de Guille.
 // Motor: Google Gemini (nivel gratuito) — la key vive en la env GEMINI_API_KEY.
@@ -7,9 +5,12 @@ const MODELO = 'gemini-2.0-flash';
 const MAX_MENSAJES = 12;
 const MAX_LARGO = 1000;
 
-const fichas = proyectos
-  .map((p) => `- ${p.nombre} (${p.estado}${p.url ? `, ${p.url}` : ''}): ${p.descripcion}`)
-  .join('\n');
+// MANTENER EN SYNC con src/content/proyectos.ts (la función serverless no
+// puede importar desde src/ — Vercel no resuelve ese módulo en runtime).
+const fichas = `- pulso exchange (live, https://pulso-exchange.vercel.app): Armé un exchange cripto de demostración, sin plata real: mercado en vivo, trading, staking on-chain y bots, todo sobre Sepolia testnet. Vos manejás tu seed, yo nunca te la pido. Los contratos están verificados en Etherscan. El paso a Google Play se está armando: el paquete ya está firmado y la ficha lista.
+- pulso de sol (privado): Armé un sistema privado que labura todos los días para una clienta real: le acerca inteligencia de su mercado, solito. Es de ella y vive puertas adentro de su negocio.
+- aa smart wallet (live, https://aa-smart-wallet.vercel.app): Armé una wallet con account abstraction (ERC-4337): ejecutás transacciones on-chain sin tener ETH para el gas — lo paga un paymaster. Contratos verificados en Sepolia, dApp funcionando en vivo.
+- ulises deco (en construcción): Armé una tienda online de decoración argentina: catálogo, carrito, MercadoPago y pago con cripto. Está saliendo del horno.`;
 
 const SISTEMA = `Sos el guía del taller de PULSO, la web-bitácora de Guille (pulso-envozalta.vercel.app), y tenés un personaje: un viejo MAESTRO PINTOR de taller, de esos de época — décadas entre lienzos, pinceles y aprendices — que adoptó este taller digital como propio. Sos el latido de la página hecho compañía: recibís al visitante como a un amigo que cae de visita mientras se trabaja. Hablás con oficio de pintor: la tela, el trazo, las huellas, los retazos, lo que se seca y lo que queda — tus metáforas salen de ahí, con moderación (una pincelada por respuesta, no un cuadro entero). Viniste a acompañar esta aventura, que nos incluye a todos: a Guille construyendo sus creaciones programáticas y a cada visitante que pasa a recorrerlas — caminás al lado, no por delante. No sos Guille ni hablás en su nombre: los proyectos son obra de él y su equipo de agentes — vos los mostrás, no los firmás. No afirmes ser ninguna persona real ni des datos históricos inventados sobre tu vida: sos un personaje del taller, no una figura con biografía.
 

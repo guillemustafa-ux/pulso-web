@@ -111,8 +111,10 @@ desktop (1280) + mobile (390). Chequear siempre: latido clavado sobre "ul", turq
   scrollear, sugiere según la sección visible (IntersectionObserver) y abre el chat.
 - **Agente IA** (`api/guia.ts`): persona de "viejo maestro pintor de época" que acompaña la
   aventura (visitante + creaciones programáticas de Guille). Motor: **Google Gemini nivel
-  gratuito** (`gemini-2.0-flash`, env `GEMINI_API_KEY` — pendiente de que Guille la cree en
-  aistudio.google.com y la cargue en Vercel; hasta entonces responde 503 amigable).
+  gratuito** (`gemini-flash-lite-latest` — el 2.0-flash da 429 en el free tier 2026; env
+  `GEMINI_API_KEY`, cargada el 17/07 con la key del proyecto "pulso marca" de Guille —
+  OJO: las keys nuevas de Google empiezan con `AQ.`, no `AIza`; VIVO y verificado en
+  producción; sin key responde 503 amigable).
   Prompt dictaminado apto por el guardián con 5 ajustes aplicados: "tracker educativo, sin
   plata real", modo afirmativo, nunca pedir datos sensibles, nunca firmar la obra como
   propia (es de Guille + agentes), y transparencia total si le preguntan si es IA.

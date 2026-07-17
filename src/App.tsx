@@ -7,7 +7,6 @@ import Muro from './components/Muro';
 import Footer from './components/Footer';
 import AgujaCursor from './components/AgujaCursor';
 import Atril from './components/Atril';
-import PincelCapa from './components/PincelCapa';
 import LienzoModal from './components/LienzoModal';
 import Guia from './components/Guia';
 import { PincelProvider } from './lib/pincel';
@@ -33,7 +32,6 @@ export default function App() {
   return (
     <PincelProvider>
       <AgujaCursor />
-      <PincelCapa />
       <Atril />
       <LienzoModal />
       <Guia />

@@ -3,8 +3,8 @@ import Latido from './Latido';
 import MaestroAvatar from './MaestroAvatar';
 import { usePincel } from '../lib/pincel';
 
-// El acompañante: un latido chiquito y tenue que aparece al scrollear,
-// sugiere según dónde estés, y al abrirlo es el guía del taller — un
+// El acompañante: Apeles, el maestro del taller, parado en la puerta desde
+// que entrás. Sugiere según dónde estés, y al tocarlo abre el chat — un
 // agente IA que responde sobre los proyectos, la marca y Guille.
 const MAX_PREGUNTAS_DIA = 10;
 const CLAVE_CUPO = 'pulso-guia-hoy';
@@ -39,7 +39,7 @@ const ETAPAS: { id: string; label: string; espacio?: string }[] = [
   { id: 'manifiesto', label: 'pasá por el manifiesto', espacio: 'manifiesto' },
   { id: 'obras', label: 'mirá las obras', espacio: 'latiendo' },
   { id: 'bitacora', label: 'hojeá la bitácora', espacio: 'bitacora' },
-  { id: 'pintar', label: 'pintá la página (mi paleta te espera)' },
+  { id: 'pintar', label: 'pintá en el lienzo del Atril' },
   { id: 'huella', label: 'colgá tu huella en el muro', espacio: 'muro' },
 ];
 // qué etapa se cumple al pasar por cada sección
@@ -88,7 +88,6 @@ function cupoDeHoy(): number {
 }
 
 export default function Guia() {
-  const [visible, setVisible] = useState(false);
   const [sugerencia, setSugerencia] = useState('¿te acompaño? tocame');
   const [abierto, setAbierto] = useState(false);
   const [mensajes, setMensajes] = useState<Mensaje[]>([]);
@@ -98,7 +97,7 @@ export default function Guia() {
   const [hechas, setHechas] = useState<Set<string>>(recorridoGuardado);
   const caminandoRef = useRef(false);
   const finRef = useRef<HTMLDivElement>(null);
-  const { modoPincel } = usePincel();
+  const { lienzoAbierto, setLienzoAbierto } = usePincel();
   const completo = hechas.size >= ETAPAS.length;
   const actividadRef = useRef<number[]>([]);
   const [intuicion, setIntuicion] = useState<Intuicion>(() => intuir(recorridoGuardado(), 0));
@@ -139,10 +138,11 @@ export default function Guia() {
     });
   };
 
-  // pintar la página cumple su etapa; la huella avisa desde el lienzo
+  // abrir el lienzo del Atril cumple la etapa de pintar; la huella avisa
+  // desde el lienzo al colgarse
   useEffect(() => {
-    if (modoPincel) marcarEtapa('pintar');
-  }, [modoPincel]);
+    if (lienzoAbierto) marcarEtapa('pintar');
+  }, [lienzoAbierto]);
   useEffect(() => {
     const alColgar = () => marcarEtapa('huella');
     window.addEventListener('pulso:huella', alColgar);
@@ -200,14 +200,6 @@ export default function Guia() {
     };
     requestAnimationFrame(paso);
   };
-
-  // aparece recién cuando el visitante baja de la zona del hero
-  useEffect(() => {
-    const alScrollear = () => setVisible(window.scrollY > window.innerHeight * 0.5);
-    alScrollear();
-    window.addEventListener('scroll', alScrollear, { passive: true });
-    return () => window.removeEventListener('scroll', alScrollear);
-  }, []);
 
   // la sugerencia sigue la sección que estás mirando
   useEffect(() => {
@@ -284,11 +276,22 @@ export default function Guia() {
     }
   };
 
-  if (!visible && !caminando) return null;
-
   return (
     <div className={`guia ${caminando ? 'caminando' : ''}`}>
-      {(abierto || caminando) && (
+      <div
+        className={`guia-persona ${abierto ? 'abierto' : ''}`}
+        role="button"
+        tabIndex={0}
+        aria-expanded={abierto}
+        aria-label="Hablar con Apeles, el maestro del taller"
+        onClick={() => setAbierto(!abierto)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            setAbierto(!abierto);
+          }
+        }}
+      >
         <MaestroAvatar
           pensando={pensando}
           caminando={caminando}
@@ -296,12 +299,13 @@ export default function Guia() {
           inicial={intuicion.inicial}
           dedicatoria={intuicion.dedicatoria}
         />
-      )}
+        {!abierto && !caminando && <span className="guia-sugerencia">{sugerencia}</span>}
+      </div>
       {abierto && (
         <div className="guia-chat">
           <div className="guia-chat-cabeza">
             <Latido strokeWidth={10} className="mini-pulse" />
-            <span>el maestro del taller</span>
+            <span>Apeles · maestro del taller</span>
             <button onClick={() => setAbierto(false)} aria-label="Cerrar el guía">
               ✕
             </button>
@@ -309,9 +313,10 @@ export default function Guia() {
           <div className="guia-mensajes">
             {mensajes.length === 0 && (
               <p className="guia-hola">
-                Adelante, pasá — soy el maestro de este taller. Eso del caballete lo pinté para
-                vos, de bienvenida. Tocá mi paleta y jugá: acá el código es ese — se mira, se
-                pinta, se deja huella. Y preguntame por las obras, por la marca o por Guille.
+                Adelante, pasá — soy Apeles, el maestro de este taller. Eso del caballete lo
+                pinté para vos, de bienvenida. Tocá mi paleta y pintá en el lienzo: acá el
+                código es ese — se mira, se pinta, se deja huella. Y preguntame por las obras,
+                por la marca o por Guille.
               </p>
             )}
             <div className="guia-recorrido">
@@ -322,8 +327,11 @@ export default function Guia() {
                   <button
                     key={etapa.id}
                     className={`guia-etapa ${hecha ? 'hecha' : ''}`}
-                    disabled={hecha || !etapa.espacio}
-                    onClick={() => etapa.espacio && llevarA(etapa.espacio)}
+                    disabled={hecha}
+                    onClick={() => {
+                      if (etapa.id === 'pintar') setLienzoAbierto(true);
+                      else if (etapa.espacio) llevarA(etapa.espacio);
+                    }}
                   >
                     <span className="guia-etapa-tilde">{hecha ? '✓' : '○'}</span>
                     {etapa.label}
@@ -370,10 +378,6 @@ export default function Guia() {
           </form>
         </div>
       )}
-      <button className="guia-boton" onClick={() => setAbierto(!abierto)} aria-expanded={abierto}>
-        <Latido animado strokeWidth={9} className="guia-latido" />
-        {!abierto && <span className="guia-sugerencia">{sugerencia}</span>}
-      </button>
     </div>
   );
 }

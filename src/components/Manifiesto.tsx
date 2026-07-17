@@ -1,12 +1,12 @@
-// Manifiesto — texto literal de pulso-marca/VOZ.md §1 (v2 del 17/07), cero reescritura
+// Manifiesto — texto literal de pulso-marca/VOZ.md §1 (v2.1 del 17/07), cero reescritura
 export default function Manifiesto() {
   return (
     <section id="manifiesto">
       <h2 className="section-title">Manifiesto</h2>
       <div className="manifiesto reveal">
         <p>
-          Esto es Pulso: mi taller con la puerta abierta. Comparto mis proyectos como están en
-          este momento — mientras se rompen, mientras los arreglo, mientras arrancan por primera
+          Pulso: un taller con la puerta abierta. Comparto mis proyectos como están en este
+          momento — mientras se rompen, mientras los arreglo, mientras arrancan por primera
           vez.
         </p>
         <p>
@@ -24,7 +24,7 @@ export default function Manifiesto() {
           va construyendo. Ahora sí — con tu devo, tu comentario, tu opinión, tu huella. Ahí es
           donde se completa el ciclo.
         </p>
-        <div className="meta-mono">día uno 14/07 · manifiesto v2 17/07 · pulso</div>
+        <div className="meta-mono">día uno 14/07 · manifiesto v2.1 17/07 · pulso</div>
       </div>
     </section>
   );

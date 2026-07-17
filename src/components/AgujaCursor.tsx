@@ -1,17 +1,16 @@
 import { useEffect, useRef } from 'react';
-import { usePincel } from '../lib/pincel';
 
 // El mouse cose la gran tela: puntadas de hilo ember que siguen al cursor y se
 // desvanecen. Solo con puntero fino (desktop) y sin prefers-reduced-motion.
-// Con el modo pincel activo la aguja descansa — pinta el pincel.
+// Nítidas y con cuerpo — es la única huella que el visitante deja al pasar
+// por la página (pintar de verdad es en el lienzo del Atril).
 type Punto = { x: number; y: number; t: number };
 
-const VIDA_MS = 900; // cuánto vive cada puntada antes de desvanecerse
+const VIDA_MS = 1200; // cuánto vive cada puntada antes de desvanecerse
 const LARGO_PUNTADA = 14; // px entre puntadas — costura, no trazo continuo
 
 export default function AgujaCursor() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { modoPincel } = usePincel();
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -43,12 +42,12 @@ export default function AgujaCursor() {
       const ahora = performance.now();
       while (puntos.length && ahora - puntos[0].t > VIDA_MS) puntos.shift();
       ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-      ctx.lineWidth = 2;
+      ctx.lineWidth = 3.5;
       ctx.lineCap = 'round';
       // un segmento sí y uno no: la puntada pasa por arriba y por abajo de la tela
       for (let i = 1; i < puntos.length; i += 2) {
         const edad = (ahora - puntos[i].t) / VIDA_MS;
-        ctx.strokeStyle = `rgba(255, 91, 53, ${0.55 * (1 - edad)})`;
+        ctx.strokeStyle = `rgba(255, 91, 53, ${0.9 * (1 - edad)})`;
         ctx.beginPath();
         ctx.moveTo(puntos[i - 1].x, puntos[i - 1].y);
         ctx.lineTo(puntos[i].x, puntos[i].y);
@@ -65,8 +64,7 @@ export default function AgujaCursor() {
       window.removeEventListener('mousemove', mover);
       window.removeEventListener('resize', ajustar);
     };
-  }, [modoPincel]);
+  }, []);
 
-  if (modoPincel) return null;
   return <canvas ref={canvasRef} className="hilo-cursor" aria-hidden="true" />;
 }

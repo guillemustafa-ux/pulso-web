@@ -2,13 +2,11 @@ import { useState } from 'react';
 import { usePincel, COLORES, GROSORES, TRAMAS } from '../lib/pincel';
 
 // El atril del taller, arriba a la derecha: abre el lienzo para dejar tu
-// huella y presta el pincel para pintar la página (modo pincel).
+// huella. Acá se elige color, grosor y trama del pincel — se pinta SOLO en
+// el lienzo, nunca sobre la página.
 export default function Atril() {
-  const { modoPincel, setModoPincel, setLienzoAbierto, ajustes, setAjustes, limpiarTela } =
-    usePincel();
+  const { setLienzoAbierto, ajustes, setAjustes } = usePincel();
   const [abierto, setAbierto] = useState(false);
-  const punteroFino =
-    typeof window !== 'undefined' && window.matchMedia('(pointer: fine)').matches;
 
   return (
     <div className={`atril ${abierto ? 'abierto' : ''}`}>
@@ -35,22 +33,6 @@ export default function Atril() {
           <button className="atril-huella" onClick={() => { setLienzoAbierto(true); setAbierto(false); }}>
             dejá tu huella →
           </button>
-
-          {punteroFino && (
-            <>
-              <label className="atril-toggle">
-                <input
-                  type="checkbox"
-                  checked={modoPincel}
-                  onChange={(e) => setModoPincel(e.target.checked)}
-                />
-                pintar la página — la tela absorbe todo de a poco
-              </label>
-              <button className="atril-limpiar" onClick={limpiarTela}>
-                borrar toda la pintura
-              </button>
-            </>
-          )}
 
           <div className="atril-grupo">
             <span className="atril-titulo">color</span>

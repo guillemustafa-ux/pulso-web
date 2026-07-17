@@ -1,11 +1,11 @@
 /* Componentes — clases portadas de identidad-visual-pulso.html + capa responsive del sitio */
 
-/* ===== Latido vivo: nunca se queda quieto — su tempo sigue la actividad
-   del visitante (--latido-dur la ajusta Latido.tsx) ===== */
+/* ===== Latido vivo: nunca se queda quieto, y late a SU propio ritmo —
+   un pulso estable, como un corazón en reposo ===== */
 .latido-animado path {
   stroke-dasharray: 100;
   stroke-dashoffset: 100;
-  animation: latir var(--latido-dur, 2.4s) ease-in-out infinite;
+  animation: latir 1.8s ease-in-out infinite;
 }
 
 @keyframes latir {
@@ -730,31 +730,6 @@ footer.cierre .meta-mono {
   font-weight: 700;
 }
 
-.atril-toggle {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  font-family: 'Shantell Sans', 'Segoe Print', cursive;
-  font-size: 13.5px;
-  line-height: 1.4;
-}
-
-.atril-toggle input {
-  accent-color: var(--ember);
-  margin-top: 2px;
-}
-
-.atril-limpiar {
-  align-self: flex-start;
-  font-family: 'IBM Plex Mono', 'Cascadia Code', Consolas, monospace;
-  font-size: 12px;
-  padding: 5px 10px;
-  border: 1px dashed rgba(34, 26, 18, 0.45);
-  border-radius: 6px;
-  background: transparent;
-  color: var(--tinta);
-}
-
 .atril-titulo {
   font-family: 'IBM Plex Mono', 'Cascadia Code', Consolas, monospace;
   font-size: 11px;
@@ -807,23 +782,6 @@ footer.cierre .meta-mono {
   border-color: var(--ember);
   color: var(--ember);
   font-weight: 700;
-}
-
-/* ===== Modo pincel: capas de pintura sobre la página ===== */
-.pincel-capa {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-  z-index: 55;
-}
-
-body.modo-pincel {
-  cursor:
-    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='30'><path d='M4 26 Q3 22 7 21 L10 24 Q9 28 4 26Z' fill='%23FF5B35'/><line x1='10' y1='21' x2='24' y2='6' stroke='%23221A12' stroke-width='3' stroke-linecap='round'/><line x1='24' y1='6' x2='27' y2='3' stroke='%23A98E5F' stroke-width='3.4' stroke-linecap='round'/></svg>")
-      4 26,
-    auto;
 }
 
 /* ===== Lienzo del atril (modal) ===== */
@@ -1026,25 +984,33 @@ body.modo-pincel {
   gap: 8px;
 }
 
-.guia-boton {
+/* Apeles parado en la puerta: el propio avatar es el botón del guía —
+   tenue, sin sobresalir, desde que entrás a la página */
+.guia-persona {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  background: transparent;
-  border: none;
-  padding: 4px;
-  opacity: 0.75;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  cursor: pointer;
+  opacity: 0.8;
   transition: opacity 0.3s ease;
 }
 
-.guia-boton:hover {
+.guia-persona:hover,
+.guia-persona:focus-visible,
+.guia-persona.abierto {
   opacity: 1;
+  outline: none;
 }
 
-.guia-latido {
-  width: 46px;
-  height: 20px;
-  flex: none;
+.guia-persona .maestro {
+  width: 104px;
+  height: auto;
+  transition: width 0.4s ease;
+}
+
+.guia-persona.abierto .maestro {
+  width: 160px;
 }
 
 .guia-sugerencia {
@@ -1217,6 +1183,13 @@ body.modo-pincel {
 
 .guia-msj.pensando {
   color: var(--ember);
+}
+
+/* el corazón del delantal late siempre, a su ritmo */
+.maestro-corazon {
+  animation: corazon-latir 1.8s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
 }
 
 /* mientras el maestro piensa, late un corazón */
@@ -1536,6 +1509,7 @@ body.modo-pincel {
   .maestro-ojos,
   .maestro-brazo-pincel,
   .maestro-paleta,
+  .maestro-corazon,
   .maestro-trazo {
     animation: none;
   }
@@ -1556,8 +1530,12 @@ body.modo-pincel {
     display: none;
   }
 
-  .maestro {
-    width: 118px;
+  .guia-persona .maestro {
+    width: 84px;
     height: auto;
+  }
+
+  .guia-persona.abierto .maestro {
+    width: 128px;
   }
 }

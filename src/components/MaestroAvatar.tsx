@@ -76,9 +76,11 @@ export default function MaestroAvatar({
   inicial?: number;
   dedicatoria?: string;
 }) {
-  const { modoPincel, setModoPincel } = usePincel();
+  const { lienzoAbierto, setLienzoAbierto } = usePincel();
 
-  const alternarPincel = () => setModoPincel(!modoPincel);
+  // la paleta invita a pintar — en el lienzo del Atril, único lugar donde
+  // se pinta de verdad
+  const abrirLienzo = () => setLienzoAbierto(true);
 
   return (
     <svg
@@ -151,8 +153,9 @@ export default function MaestroAvatar({
           <ellipse cx="114" cy="134" rx="3.5" ry="2.5" fill="var(--ocre)" transform="rotate(-25 114 134)" />
           <circle cx="86" cy="103" r="1.8" fill="var(--mostaza)" />
           <circle cx="119" cy="118" r="1.5" fill="var(--ember)" />
-          {/* el corazón: una mancha que no es casualidad */}
+          {/* el corazón: una mancha que no es casualidad — y late */}
           <path
+            className="maestro-corazon"
             d="M88 131 C85 128 84 125.5 86 124.3 C87.2 123.6 88 124.6 88 125.6 C88 124.6 88.8 123.6 90 124.3 C92 125.5 91 128 88 131"
             fill="var(--ember)"
           />
@@ -215,16 +218,20 @@ export default function MaestroAvatar({
           className="maestro-paleta"
           role="button"
           tabIndex={0}
-          aria-label={modoPincel ? 'Devolver el pincel' : 'Tomar el pincel y pintar la página'}
-          onClick={alternarPincel}
+          aria-label="Abrir el lienzo del Atril para pintar"
+          onClick={(e) => {
+            e.stopPropagation();
+            abrirLienzo();
+          }}
           onKeyDown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') {
               e.preventDefault();
-              alternarPincel();
+              e.stopPropagation();
+              abrirLienzo();
             }
           }}
         >
-          <title>{modoPincel ? 'devolver el pincel' : 'tocá la paleta y pintá vos'}</title>
+          <title>tocá la paleta y pintá en el lienzo</title>
           <ellipse cx="133" cy="104" rx="13" ry="10" fill="#F2ECDC" stroke="var(--tinta)" strokeWidth="2.5" />
           <ellipse cx="127" cy="108" rx="2.5" ry="2" fill="var(--papel)" stroke="var(--tinta)" strokeWidth="1.5" />
           <circle cx="128" cy="99" r="2" fill="var(--ember)" />
@@ -234,7 +241,7 @@ export default function MaestroAvatar({
           <circle cx="135" cy="111" r="1.8" fill="var(--tinta)" />
         </g>
         <text className="maestro-caveat maestro-invita" x="132" y="128" textAnchor="middle">
-          {modoPincel ? '¡a pintar!' : '¿pintamos?'}
+          {lienzoAbierto ? '¡a pintar!' : '¿pintamos?'}
         </text>
       </g>
     </svg>

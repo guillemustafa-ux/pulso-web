@@ -17,40 +17,31 @@ export const TRAMAS: { id: Trama; nombre: string }[] = [
   { id: 'tela', nombre: 'tela' },
 ];
 
+// Se pinta SOLO en el lienzo del Atril (decisión de Guille 17/07: la página
+// no se pinta más — el modo pincel de página completo se quitó).
 type PincelCtx = {
-  modoPincel: boolean;
-  setModoPincel: (v: boolean) => void;
   lienzoAbierto: boolean;
   setLienzoAbierto: (v: boolean) => void;
   ajustes: Ajustes;
   setAjustes: (a: Ajustes) => void;
-  nonceLimpiar: number;
-  limpiarTela: () => void; // borra TODO lo pintado en la página, capas y marcas guardadas
 };
 
 const Ctx = createContext<PincelCtx | null>(null);
 
 export function PincelProvider({ children }: { children: ReactNode }) {
-  const [modoPincel, setModoPincel] = useState(false);
   const [lienzoAbierto, setLienzoAbierto] = useState(false);
   const [ajustes, setAjustes] = useState<Ajustes>({
     color: '#FF5B35',
     grosor: 6,
     trama: 'solido',
   });
-  const [nonceLimpiar, setNonceLimpiar] = useState(0);
-  const limpiarTela = () => setNonceLimpiar((n) => n + 1);
   return (
     <Ctx.Provider
       value={{
-        modoPincel,
-        setModoPincel,
         lienzoAbierto,
         setLienzoAbierto,
         ajustes,
         setAjustes,
-        nonceLimpiar,
-        limpiarTela,
       }}
     >
       {children}

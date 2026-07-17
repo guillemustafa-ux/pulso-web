@@ -96,14 +96,14 @@ desktop (1280) + mobile (390). Chequear siempre: latido clavado sobre "ul", turq
   muro; una huella suelta nunca se repostea fuera del compilado.
   **Admin**: entrar a la web con `?llave=<token>` muestra la ✕ de borrado en cada huella.
   El token vive en `.llave-muro.txt` (gitignoreado) y en la env `MURO_ADMIN_TOKEN` de Vercel.
-- **Modo pincel** (`PincelCapa.tsx`): pinta la página, pero NUNCA de forma permanente —
-  la tela absorbe todo trazo en ~75s y la página original siempre vuelve (decisión de
-  Guille del 17/07: las marcas "para siempre" en localStorage se quitaron porque tapaban
-  la página; lo persistente vive solo en los lienzos del Atril → muro). Label del Atril
-  dictaminado apto: "pintar la página — la tela absorbe todo de a poco".
-- **Latido vivo** (`Latido.tsx` con `animado`): nunca se queda quieto; su TEMPO sigue la
-  actividad del visitante (2.4s en reposo → 0.55s a full). La aguja descansa mientras el
-  pincel está activo.
+- **Se pinta SOLO en el lienzo del Atril** (decisión final de Guille, 17/07 noche): el
+  modo pincel de página se quitó del todo (`PincelCapa.tsx` borrado; el contexto
+  `pincel.tsx` quedó solo con lienzo + ajustes). La única huella al transitar son las
+  puntadas ember del cursor (`AgujaCursor.tsx`, nítidas, lineWidth 3.5, se desvanecen
+  en ~1.2s).
+- **Latido vivo** (`Latido.tsx` con `animado`): nunca se queda quieto y late a SU propio
+  ritmo, estable (1.8s) — decisión de Guille 17/07 noche: el tempo ya NO sigue la
+  actividad del visitante ("el pulso tiene su timing").
 
 ## v2.3 — el maestro del taller (17/07/2026)
 
@@ -152,6 +152,20 @@ desktop (1280) + mobile (390). Chequear siempre: latido clavado sobre "ul", turq
 - **Corazón al pensar**: mientras el guía responde, en el chat late un ♥ ember.
 - Fix de paso: el autoscroll del chat usaba `scrollIntoView` y arrastraba la página
   entera al fondo — ahora scrollea solo la caja de mensajes.
+
+## v2.5 — Apeles (17/07/2026, noche)
+
+- **El maestro tiene nombre: APELES** — homenaje al pintor griego de "ni un día sin una
+  línea" (lema hermano del build-in-public). Cabecera: "Apeles · maestro del taller".
+  En SISTEMA: nombre prestado como juego declarado, nunca afirma ser el histórico.
+- **Parado en la puerta**: el avatar es el botón del guía (`.guia-persona`) y se ve
+  desde que entrás — 104px tenue, 160px con el chat abierto. Se quitó el gate de scroll
+  y el botón-latido viejo.
+- **La paleta y la etapa "pintá en el lienzo del Atril" abren el lienzo** (ya no hay
+  pintura de página).
+- **Manifiesto v2.1** (texto de Guille): arranque directo "Pulso: un taller con la
+  puerta abierta..." — VOZ.md §1 actualizado.
+- **El corazón del delantal LATE** (1.8s, `.maestro-corazon`), además del ♥ al pensar.
 
 ## Deploy (17/07/2026)
 

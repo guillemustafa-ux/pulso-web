@@ -744,6 +744,17 @@ footer.cierre .meta-mono {
   margin-top: 2px;
 }
 
+.atril-limpiar {
+  align-self: flex-start;
+  font-family: 'IBM Plex Mono', 'Cascadia Code', Consolas, monospace;
+  font-size: 12px;
+  padding: 5px 10px;
+  border: 1px dashed rgba(34, 26, 18, 0.45);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--tinta);
+}
+
 .atril-titulo {
   font-family: 'IBM Plex Mono', 'Cascadia Code', Consolas, monospace;
   font-size: 11px;

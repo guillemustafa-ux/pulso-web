@@ -24,6 +24,8 @@ type PincelCtx = {
   setLienzoAbierto: (v: boolean) => void;
   ajustes: Ajustes;
   setAjustes: (a: Ajustes) => void;
+  nonceLimpiar: number;
+  limpiarTela: () => void; // borra TODO lo pintado en la página, capas y marcas guardadas
 };
 
 const Ctx = createContext<PincelCtx | null>(null);
@@ -36,9 +38,20 @@ export function PincelProvider({ children }: { children: ReactNode }) {
     grosor: 6,
     trama: 'solido',
   });
+  const [nonceLimpiar, setNonceLimpiar] = useState(0);
+  const limpiarTela = () => setNonceLimpiar((n) => n + 1);
   return (
     <Ctx.Provider
-      value={{ modoPincel, setModoPincel, lienzoAbierto, setLienzoAbierto, ajustes, setAjustes }}
+      value={{
+        modoPincel,
+        setModoPincel,
+        lienzoAbierto,
+        setLienzoAbierto,
+        ajustes,
+        setAjustes,
+        nonceLimpiar,
+        limpiarTela,
+      }}
     >
       {children}
     </Ctx.Provider>

@@ -13,9 +13,20 @@ export default function PincelCapa() {
   const fijaRef = useRef<HTMLCanvasElement>(null);
   const efimeraRef = useRef<HTMLCanvasElement>(null);
   const hayCambiosRef = useRef(false);
-  const { modoPincel, ajustes } = usePincel();
+  const { modoPincel, ajustes, nonceLimpiar } = usePincel();
   const ajustesRef = useRef(ajustes);
   ajustesRef.current = ajustes;
+
+  // "borrar toda la pintura de una": limpia ambas capas y las marcas guardadas
+  useEffect(() => {
+    if (nonceLimpiar === 0) return;
+    for (const canvas of [fijaRef.current, efimeraRef.current]) {
+      const ctx = canvas?.getContext('2d');
+      if (canvas && ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+    localStorage.removeItem(CLAVE_MARCAS);
+    hayCambiosRef.current = false;
+  }, [nonceLimpiar]);
 
   // la capa fija vive siempre: restaura las marcas guardadas de visitas anteriores
   useEffect(() => {

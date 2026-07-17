@@ -1013,3 +1013,164 @@ body.modo-pincel {
     display: none;
   }
 }
+
+/* ===== El guía del taller (acompañante, abajo del Atril) ===== */
+.guia {
+  position: fixed;
+  top: 72px;
+  right: 14px;
+  z-index: 70;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.guia-boton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  padding: 4px;
+  opacity: 0.75;
+  transition: opacity 0.3s ease;
+}
+
+.guia-boton:hover {
+  opacity: 1;
+}
+
+.guia-latido {
+  width: 46px;
+  height: 20px;
+  flex: none;
+}
+
+.guia-sugerencia {
+  font-family: 'Caveat', 'Segoe Script', 'Segoe Print', cursive;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--tinta);
+  opacity: 0.8;
+  max-width: 170px;
+  text-align: right;
+  line-height: 1.15;
+}
+
+.guia-chat {
+  width: min(320px, calc(100vw - 28px));
+  background: var(--papel);
+  border: 1.5px solid var(--tinta);
+  border-radius: 10px;
+  box-shadow: 0 3px 0 rgba(34, 26, 18, 0.15);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.guia-chat-cabeza {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--borde);
+  font-family: 'IBM Plex Mono', 'Cascadia Code', Consolas, monospace;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.guia-chat-cabeza button {
+  margin-left: auto;
+  background: transparent;
+  border: none;
+  color: var(--tinta);
+  font-size: 14px;
+}
+
+.guia-mensajes {
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.guia-hola,
+.guia-msj {
+  font-family: 'Shantell Sans', 'Segoe Print', cursive;
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+  max-width: 90%;
+}
+
+.guia-hola {
+  opacity: 0.75;
+}
+
+.guia-msj.visitante {
+  align-self: flex-end;
+  background: rgba(34, 26, 18, 0.07);
+  border-radius: 8px 8px 2px 8px;
+  padding: 6px 10px;
+}
+
+.guia-msj.guia {
+  align-self: flex-start;
+}
+
+.guia-msj.pensando {
+  color: var(--ember);
+  letter-spacing: 3px;
+}
+
+.guia-form {
+  display: flex;
+  gap: 6px;
+  padding: 10px;
+  border-top: 1px solid var(--borde);
+}
+
+.guia-form input {
+  flex: 1;
+  background: transparent;
+  border: 1.5px dashed rgba(34, 26, 18, 0.35);
+  border-radius: 4px;
+  padding: 8px 10px;
+  color: var(--tinta);
+  font-family: 'Shantell Sans', 'Segoe Print', cursive;
+  font-size: 14px;
+}
+
+.guia-form input:focus {
+  outline: none;
+  border-color: var(--ember);
+  border-style: solid;
+}
+
+.guia-form button {
+  background: var(--ember);
+  color: var(--crema);
+  border: none;
+  border-radius: 4px;
+  padding: 0 14px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.guia-form button:disabled {
+  opacity: 0.5;
+}
+
+@media (max-width: 640px) {
+  .guia {
+    top: 64px;
+    right: 10px;
+  }
+
+  .guia-sugerencia {
+    display: none;
+  }
+}

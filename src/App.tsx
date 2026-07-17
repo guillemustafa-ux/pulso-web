@@ -9,6 +9,7 @@ import AgujaCursor from './components/AgujaCursor';
 import Atril from './components/Atril';
 import PincelCapa from './components/PincelCapa';
 import LienzoModal from './components/LienzoModal';
+import Guia from './components/Guia';
 import { PincelProvider } from './lib/pincel';
 
 export default function App() {
@@ -35,6 +36,7 @@ export default function App() {
       <PincelCapa />
       <Atril />
       <LienzoModal />
+      <Guia />
       <div className="wrap">
         <Hero />
         <main>

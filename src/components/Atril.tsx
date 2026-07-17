@@ -27,7 +27,7 @@ export default function Atril() {
           <line x1="16" y1="19" x2="16" y2="27" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
           <path d="M11 12 Q14 8 17 11 T23 10" fill="none" stroke="#FF5B35" strokeWidth="2" strokeLinecap="round" />
         </svg>
-        <span className="atril-label">el atril</span>
+        <span className="atril-label">Atril</span>
       </button>
 
       {abierto && (

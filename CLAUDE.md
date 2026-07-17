@@ -96,9 +96,11 @@ desktop (1280) + mobile (390). Chequear siempre: latido clavado sobre "ul", turq
   muro; una huella suelta nunca se repostea fuera del compilado.
   **Admin**: entrar a la web con `?llave=<token>` muestra la ✕ de borrado en cada huella.
   El token vive en `.llave-muro.txt` (gitignoreado) y en la env `MURO_ADMIN_TOKEN` de Vercel.
-- **Modo pincel** (`PincelCapa.tsx`): pinta la página; la tela tiene memoria caprichosa —
-  la mayoría de los gestos se desvanecen en ~40s, ~3 de 10 quedan marcados para siempre
-  (localStorage del visitante, clave `pulso-tela-marcas`).
+- **Modo pincel** (`PincelCapa.tsx`): pinta la página, pero NUNCA de forma permanente —
+  la tela absorbe todo trazo en ~75s y la página original siempre vuelve (decisión de
+  Guille del 17/07: las marcas "para siempre" en localStorage se quitaron porque tapaban
+  la página; lo persistente vive solo en los lienzos del Atril → muro). Label del Atril
+  dictaminado apto: "pintar la página — la tela absorbe todo de a poco".
 - **Latido vivo** (`Latido.tsx` con `animado`): nunca se queda quieto; su TEMPO sigue la
   actividad del visitante (2.4s en reposo → 0.55s a full). La aguja descansa mientras el
   pincel está activo.
@@ -116,6 +118,38 @@ desktop (1280) + mobile (390). Chequear siempre: latido clavado sobre "ul", turq
   propia (es de Guille + agentes), y transparencia total si le preguntan si es IA.
   Cupo 10 preguntas/día por navegador. OJO: las fichas de proyectos están INLINE en
   api/guia.ts (la función no puede importar de src/) — mantener en sync con proyectos.ts.
+
+## v2.4 — el maestro en persona (17/07/2026, misma tarde)
+
+- **Avatar** (`MaestroAvatar.tsx`, SVG a línea): viejito pintor con boina ember, delantal
+  manchado (paleta del canal + un corazón ember entre las manchas), cinturón de pinceles y
+  paleta en mano. Parpadea, se mece, y el brazo del pincel pinta (más rápido si "piensa").
+  Aparece arriba del chat del guía; solo colores del canal, jamás turquesa.
+- **El caballete de los regalos**: junto al maestro, un lienzo donde pinta 5 dibujos
+  dedicados, pincelada por pincelada (nunca dos trazos a la vez, ciclo de 60s):
+  corazón con el latido adentro (el de la marca), mate, el gato del taller, barquito de
+  papel, bici. OJO CSS: el shorthand `animation` SIN nombre lo colapsa el minificador a
+  `animation:none` — siempre shorthand con nombre (comentario en components.css).
+- **La intuición**: por señales locales (etapas hechas, movimiento reciente, hora) elige
+  el dibujo inicial y la dedicatoria Caveat ("para vos, colega" / "un mate, hay tiempo" /
+  "un mate, para arrancar" / "para vos, trasnochado" / "para vos, paseandero" — todas
+  dictaminadas). La señal viaja a `api/guia.ts` como ID cerrado (nunca texto libre) y se
+  vuelve una línea de contexto para el trato. Regla dura nueva del guardián: si preguntan
+  cómo supo algo, lo blanquea (hora + movimiento, nada sale del navegador).
+- **La paleta clickeable**: activa/devuelve el pincel ("¿pintamos?" / "¡a pintar!").
+- **El recorrido del taller** (tipo videojuego, localStorage `pulso-recorrido`): 5 etapas
+  (manifiesto, obras, bitácora, pintar, huella — el lienzo avisa con el evento
+  `pulso:huella`). Al completarlas, el maestro pinta la estrella del visitante en el
+  caballete ("tu estrella"). Guardián: nunca deficit framing, nunca CTA de compartir,
+  el agente menciona el recorrido sin insistir.
+- **La caminata**: si el maestro nombra un espacio en el chat aparece "vení, te lo
+  muestro →" (también en cada etapa pendiente) y CAMINA llevando el scroll con easing
+  propio (scrollTo `behavior:'instant'` por frame — el `scroll-behavior:smooth` global
+  pisa el tween si no). Condición del guardián: interrumpible — wheel/touch/tecla del
+  visitante suelta el control al instante. Con reduced-motion va directo.
+- **Corazón al pensar**: mientras el guía responde, en el chat late un ♥ ember.
+- Fix de paso: el autoscroll del chat usaba `scrollIntoView` y arrastraba la página
+  entera al fondo — ahora scrollea solo la caja de mensajes.
 
 ## Deploy (17/07/2026)
 

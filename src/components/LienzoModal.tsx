@@ -99,6 +99,8 @@ export default function LienzoModal() {
       if (!res.ok) throw new Error();
       sumarCupo();
       setEstado('enviada');
+      // le avisa al recorrido del taller (el guía) que la etapa está cumplida
+      window.dispatchEvent(new Event('pulso:huella'));
     } catch {
       setEstado('error');
     }

@@ -44,7 +44,7 @@ export default function Atril() {
                   checked={modoPincel}
                   onChange={(e) => setModoPincel(e.target.checked)}
                 />
-                pintar la página — algunas huellas se borran, otras quedan
+                pintar la página — la tela absorbe todo de a poco
               </label>
               <button className="atril-limpiar" onClick={limpiarTela}>
                 borrar toda la pintura

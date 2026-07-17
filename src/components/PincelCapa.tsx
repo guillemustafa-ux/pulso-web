@@ -1,155 +1,97 @@
 import { useEffect, useRef } from 'react';
 import { usePincel, trazo, pincelada } from '../lib/pincel';
 
-// Modo pincel: el trazo queda pintado sobre la página mientras navegás.
-// La tela tiene memoria caprichosa: la mayoría de los gestos se desvanecen
-// en ~40s, pero algunos (~3 de 10) quedan marcados para siempre — se guardan
-// en el navegador del visitante y lo esperan la próxima vez que vuelve.
-const CHANCE_DE_QUEDAR = 0.3;
+// Modo pincel: el trazo queda pintado sobre la página mientras navegás,
+// pero nunca de forma permanente — la tela lo absorbe de a poco (~75s)
+// y la página original siempre vuelve. Lo que queda de verdad se dibuja
+// en el lienzo del Atril y cuelga en el muro. (Decisión de Guille 17/07:
+// antes había marcas "para siempre" en localStorage; se quitaron porque
+// tapaban la página original.)
 const PAUSA_NUEVO_GESTO = 400; // ms sin mover el mouse = gesto nuevo
-const CLAVE_MARCAS = 'pulso-tela-marcas';
 
 export default function PincelCapa() {
-  const fijaRef = useRef<HTMLCanvasElement>(null);
-  const efimeraRef = useRef<HTMLCanvasElement>(null);
-  const hayCambiosRef = useRef(false);
+  const telaRef = useRef<HTMLCanvasElement>(null);
   const { modoPincel, ajustes, nonceLimpiar } = usePincel();
   const ajustesRef = useRef(ajustes);
   ajustesRef.current = ajustes;
 
-  // "borrar toda la pintura de una": limpia ambas capas y las marcas guardadas
+  // "borrar toda la pintura de una"
   useEffect(() => {
     if (nonceLimpiar === 0) return;
-    for (const canvas of [fijaRef.current, efimeraRef.current]) {
-      const ctx = canvas?.getContext('2d');
-      if (canvas && ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
-    localStorage.removeItem(CLAVE_MARCAS);
-    hayCambiosRef.current = false;
+    const tela = telaRef.current;
+    const ctx = tela?.getContext('2d');
+    if (tela && ctx) ctx.clearRect(0, 0, tela.width, tela.height);
   }, [nonceLimpiar]);
 
-  // la capa fija vive siempre: restaura las marcas guardadas de visitas anteriores
+  // la tela vive siempre montada: lo pintado sigue desvaneciéndose aunque
+  // el visitante ya haya devuelto el pincel
   useEffect(() => {
-    const fija = fijaRef.current;
-    const ctx = fija?.getContext('2d');
-    if (!fija || !ctx) return;
-
-    const dimensionar = () => {
-      const copia = document.createElement('canvas');
-      copia.width = fija.width;
-      copia.height = fija.height;
-      copia.getContext('2d')?.drawImage(fija, 0, 0);
-      fija.width = window.innerWidth * devicePixelRatio;
-      fija.height = window.innerHeight * devicePixelRatio;
-      ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
-      if (copia.width > 0) {
-        ctx.drawImage(copia, 0, 0, copia.width / devicePixelRatio, copia.height / devicePixelRatio);
-      }
-    };
-    dimensionar();
-
-    const guardadas = localStorage.getItem(CLAVE_MARCAS);
-    if (guardadas) {
-      const img = new Image();
-      img.onload = () =>
-        ctx.drawImage(img, 0, 0, window.innerWidth, window.innerHeight);
-      img.src = guardadas;
-    }
-
-    // las marcas nuevas se guardan de a ratos, sin trabar el dibujo
-    const guardar = window.setInterval(() => {
-      if (!hayCambiosRef.current) return;
-      hayCambiosRef.current = false;
-      try {
-        localStorage.setItem(CLAVE_MARCAS, fija.toDataURL('image/png'));
-      } catch {
-        // storage lleno: la tela sigue andando, solo deja de recordar
-      }
-    }, 3000);
-
-    window.addEventListener('resize', dimensionar);
-    return () => {
-      window.clearInterval(guardar);
-      window.removeEventListener('resize', dimensionar);
-    };
-  }, []);
-
-  // el pincel activo: pinta sobre la fija (si el gesto queda) o la efímera
-  useEffect(() => {
-    document.body.classList.toggle('modo-pincel', modoPincel);
-    const fija = fijaRef.current;
-    const efimera = efimeraRef.current;
-    if (!fija || !efimera || !modoPincel) return;
-
-    const ctxFija = fija.getContext('2d');
-    const ctxEfimera = efimera.getContext('2d');
-    if (!ctxFija || !ctxEfimera) return;
+    const tela = telaRef.current;
+    const ctx = tela?.getContext('2d');
+    if (!tela || !ctx) return;
 
     const ajustar = () => {
-      efimera.width = window.innerWidth * devicePixelRatio;
-      efimera.height = window.innerHeight * devicePixelRatio;
-      ctxEfimera.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+      tela.width = window.innerWidth * devicePixelRatio;
+      tela.height = window.innerHeight * devicePixelRatio;
+      ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
     };
     ajustar();
 
+    // la tela absorbe la pintura de a poco (~75s hasta desaparecer)
+    const absorber = window.setInterval(() => {
+      ctx.save();
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.globalAlpha = 0.016;
+      ctx.fillStyle = '#000';
+      ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+      ctx.restore();
+    }, 400);
+
+    window.addEventListener('resize', ajustar);
+    return () => {
+      window.clearInterval(absorber);
+      window.removeEventListener('resize', ajustar);
+    };
+  }, []);
+
+  // el pincel activo
+  useEffect(() => {
+    document.body.classList.toggle('modo-pincel', modoPincel);
+    const tela = telaRef.current;
+    const ctx = tela?.getContext('2d');
+    if (!tela || !ctx || !modoPincel) return;
+
     let anterior: { x: number; y: number } | null = null;
     let ultimoMovimiento = 0;
-    let gestoQueda = false;
 
     const mover = (e: MouseEvent) => {
       const ahora = performance.now();
-      if (ahora - ultimoMovimiento > PAUSA_NUEVO_GESTO) {
-        // gesto nuevo: se sortea si esta pincelada queda marcada o se desvanece
-        gestoQueda = Math.random() < CHANCE_DE_QUEDAR;
-        anterior = null;
-      }
+      if (ahora - ultimoMovimiento > PAUSA_NUEVO_GESTO) anterior = null;
       ultimoMovimiento = ahora;
       const punto = { x: e.clientX, y: e.clientY };
-      const ctx = gestoQueda ? ctxFija : ctxEfimera;
       if (anterior) trazo(ctx, anterior.x, anterior.y, punto.x, punto.y, ajustesRef.current);
-      if (gestoQueda) hayCambiosRef.current = true;
       anterior = punto;
     };
 
     const click = (e: MouseEvent) => {
-      // el atril y el lienzo no se pintan encima
-      if ((e.target as HTMLElement).closest('.atril, .lienzo-overlay')) return;
-      const queda = Math.random() < CHANCE_DE_QUEDAR;
-      pincelada(queda ? ctxFija : ctxEfimera, e.clientX, e.clientY, ajustesRef.current);
-      if (queda) hayCambiosRef.current = true;
+      // el atril, el lienzo y el guía no se pintan encima
+      if ((e.target as HTMLElement).closest('.atril, .lienzo-overlay, .guia')) return;
+      pincelada(ctx, e.clientX, e.clientY, ajustesRef.current);
     };
 
     const salir = () => {
       anterior = null;
     };
 
-    // la tela absorbe la capa efímera de a poco (~40s hasta desaparecer)
-    const absorber = window.setInterval(() => {
-      ctxEfimera.save();
-      ctxEfimera.globalCompositeOperation = 'destination-out';
-      ctxEfimera.globalAlpha = 0.03;
-      ctxEfimera.fillStyle = '#000';
-      ctxEfimera.fillRect(0, 0, window.innerWidth, window.innerHeight);
-      ctxEfimera.restore();
-    }, 400);
-
     window.addEventListener('mousemove', mover);
     window.addEventListener('click', click);
     window.addEventListener('mouseout', salir);
-    window.addEventListener('resize', ajustar);
     return () => {
-      window.clearInterval(absorber);
       window.removeEventListener('mousemove', mover);
       window.removeEventListener('click', click);
       window.removeEventListener('mouseout', salir);
-      window.removeEventListener('resize', ajustar);
     };
   }, [modoPincel]);
 
-  return (
-    <>
-      <canvas ref={fijaRef} className="pincel-capa" aria-hidden="true" />
-      {modoPincel && <canvas ref={efimeraRef} className="pincel-capa" aria-hidden="true" />}
-    </>
-  );
+  return <canvas ref={telaRef} className="pincel-capa" aria-hidden="true" />;
 }

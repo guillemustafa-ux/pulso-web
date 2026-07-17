@@ -1106,6 +1106,100 @@ body.modo-pincel {
   max-width: 90%;
 }
 
+.guia-burbuja {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.guia-burbuja.visitante {
+  align-self: flex-end;
+  align-items: flex-end;
+}
+
+.guia-burbuja.guia {
+  align-self: flex-start;
+  align-items: flex-start;
+}
+
+.guia-llevame {
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-family: 'Caveat', 'Segoe Script', 'Segoe Print', cursive;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ember);
+  cursor: pointer;
+}
+
+.guia-llevame:hover {
+  text-decoration: underline;
+}
+
+/* el recorrido del taller: las etapas del visitante, como en un videojuego */
+.guia-recorrido {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 8px 10px;
+  border: 1.5px dashed rgba(34, 26, 18, 0.3);
+  border-radius: 8px;
+}
+
+.guia-recorrido-titulo {
+  font-family: 'Caveat', 'Segoe Script', 'Segoe Print', cursive;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--tinta);
+  opacity: 0.8;
+}
+
+.guia-etapa {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  text-align: left;
+  font-family: 'Shantell Sans', 'Segoe Print', cursive;
+  font-size: 12.5px;
+  color: var(--tinta);
+  cursor: pointer;
+}
+
+.guia-etapa:disabled {
+  cursor: default;
+}
+
+.guia-etapa.hecha {
+  opacity: 0.55;
+  text-decoration: line-through;
+}
+
+.guia-etapa:not(.hecha):not(:disabled):hover {
+  color: var(--ember);
+}
+
+.guia-etapa-tilde {
+  font-family: 'IBM Plex Mono', 'Cascadia Code', Consolas, monospace;
+  font-size: 12px;
+  flex: none;
+}
+
+.guia-etapa.hecha .guia-etapa-tilde {
+  color: var(--verde);
+}
+
+.guia-recorrido-fin {
+  margin: 4px 0 0;
+  font-family: 'Caveat', 'Segoe Script', 'Segoe Print', cursive;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--ember);
+}
+
 .guia-hola {
   opacity: 0.75;
 }
@@ -1123,7 +1217,31 @@ body.modo-pincel {
 
 .guia-msj.pensando {
   color: var(--ember);
-  letter-spacing: 3px;
+}
+
+/* mientras el maestro piensa, late un corazón */
+.corazon-pensando {
+  display: inline-block;
+  font-size: 18px;
+  animation: corazon-latir 0.9s ease-in-out infinite;
+}
+
+@keyframes corazon-latir {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  35% {
+    transform: scale(1.25);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .corazon-pensando {
+    animation: none;
+  }
 }
 
 .guia-form {
@@ -1164,6 +1282,270 @@ body.modo-pincel {
   opacity: 0.5;
 }
 
+/* ===== El maestro en persona (avatar del guía) ===== */
+.maestro {
+  display: block;
+  margin-bottom: -2px;
+  overflow: visible;
+}
+
+/* cuando camina a mostrarte algo, baja al medio del borde y la página lo sigue */
+.guia {
+  transition: top 0.7s ease;
+}
+
+.guia.caminando {
+  top: 40vh;
+}
+
+.maestro.caminando .maestro-figura {
+  animation: maestro-caminar 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes maestro-caminar {
+  from {
+    transform: rotate(-2.5deg) translateY(-2px);
+  }
+  to {
+    transform: rotate(3deg) translateY(1px);
+  }
+}
+
+.maestro-figura {
+  animation: maestro-mecerse 4.5s ease-in-out infinite alternate;
+  transform-origin: 100px 149px;
+}
+
+@keyframes maestro-mecerse {
+  from {
+    transform: rotate(-0.6deg);
+  }
+  to {
+    transform: rotate(1deg) translateY(-1px);
+  }
+}
+
+.maestro-ojos {
+  animation: maestro-parpadear 4.6s linear infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+@keyframes maestro-parpadear {
+  0%,
+  91% {
+    transform: scaleY(1);
+  }
+  94% {
+    transform: scaleY(0.12);
+  }
+  97%,
+  100% {
+    transform: scaleY(1);
+  }
+}
+
+.maestro-brazo-pincel {
+  animation: maestro-pincelear 1.8s ease-in-out infinite alternate;
+  transform-origin: 86px 74px;
+}
+
+.maestro.pensando .maestro-brazo-pincel {
+  animation-duration: 0.45s;
+}
+
+@keyframes maestro-pincelear {
+  from {
+    transform: rotate(-3deg);
+  }
+  to {
+    transform: rotate(4deg);
+  }
+}
+
+.maestro-paleta {
+  cursor: pointer;
+  animation: maestro-invitar 2.4s ease-in-out infinite alternate;
+  transform-origin: 133px 104px;
+}
+
+.maestro-paleta:hover,
+.maestro-paleta:focus-visible {
+  animation: none;
+  transform: scale(1.12);
+  outline: none;
+}
+
+@keyframes maestro-invitar {
+  from {
+    transform: rotate(-4deg);
+  }
+  to {
+    transform: rotate(4deg) translateY(-1.5px);
+  }
+}
+
+/* los dibujos dedicados: 5 motivos de hasta 4 pinceladas, ciclo de 60s (12s
+   cada uno). Cada pincelada se pinta de a una — nunca dos trazos a la vez —
+   y el dibujo terminado se queda un buen rato antes de dar paso al otro. */
+/* OJO: nada de "animation: 60s linear infinite" sin nombre acá — el
+   minificador lo colapsa a "animation: none" y el dibujo no arranca. */
+.maestro-trazo {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+}
+
+.maestro-trazo.t1 {
+  animation: maestro-trazo-1 60s linear infinite;
+  animation-delay: var(--retraso, 0s);
+}
+
+.maestro-trazo.t2 {
+  animation: maestro-trazo-2 60s linear infinite;
+  animation-delay: var(--retraso, 0s);
+}
+
+.maestro-trazo.t3 {
+  animation: maestro-trazo-3 60s linear infinite;
+  animation-delay: var(--retraso, 0s);
+}
+
+.maestro-trazo.t4 {
+  animation: maestro-trazo-4 60s linear infinite;
+  animation-delay: var(--retraso, 0s);
+}
+
+@keyframes maestro-trazo-1 {
+  0% {
+    stroke-dashoffset: 100;
+    opacity: 1;
+  }
+  2.5% {
+    stroke-dashoffset: 0;
+  }
+  17.5% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  19.2% {
+    opacity: 0;
+  }
+  19.7% {
+    stroke-dashoffset: 100;
+    opacity: 0;
+  }
+  100% {
+    stroke-dashoffset: 100;
+    opacity: 0;
+  }
+}
+
+@keyframes maestro-trazo-2 {
+  0%,
+  2.5% {
+    stroke-dashoffset: 100;
+    opacity: 1;
+  }
+  5% {
+    stroke-dashoffset: 0;
+  }
+  17.5% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  19.2% {
+    opacity: 0;
+  }
+  19.7% {
+    stroke-dashoffset: 100;
+    opacity: 0;
+  }
+  100% {
+    stroke-dashoffset: 100;
+    opacity: 0;
+  }
+}
+
+@keyframes maestro-trazo-3 {
+  0%,
+  5% {
+    stroke-dashoffset: 100;
+    opacity: 1;
+  }
+  7.5% {
+    stroke-dashoffset: 0;
+  }
+  17.5% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  19.2% {
+    opacity: 0;
+  }
+  19.7% {
+    stroke-dashoffset: 100;
+    opacity: 0;
+  }
+  100% {
+    stroke-dashoffset: 100;
+    opacity: 0;
+  }
+}
+
+@keyframes maestro-trazo-4 {
+  0%,
+  7.5% {
+    stroke-dashoffset: 100;
+    opacity: 1;
+  }
+  10% {
+    stroke-dashoffset: 0;
+  }
+  17.5% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  19.2% {
+    opacity: 0;
+  }
+  19.7% {
+    stroke-dashoffset: 100;
+    opacity: 0;
+  }
+  100% {
+    stroke-dashoffset: 100;
+    opacity: 0;
+  }
+}
+
+.maestro-caveat {
+  font-family: 'Caveat', 'Segoe Script', 'Segoe Print', cursive;
+  font-size: 12px;
+  font-weight: 600;
+  fill: var(--tinta);
+  opacity: 0.7;
+}
+
+.maestro-invita {
+  fill: var(--ember);
+  opacity: 0.9;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .maestro-figura,
+  .maestro-ojos,
+  .maestro-brazo-pincel,
+  .maestro-paleta,
+  .maestro-trazo {
+    animation: none;
+  }
+
+  .motivo:first-of-type .maestro-trazo {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
 @media (max-width: 640px) {
   .guia {
     top: 64px;
@@ -1172,5 +1554,10 @@ body.modo-pincel {
 
   .guia-sugerencia {
     display: none;
+  }
+
+  .maestro {
+    width: 118px;
+    height: auto;
   }
 }

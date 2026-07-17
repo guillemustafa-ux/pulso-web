@@ -1,0 +1,104 @@
+/* Base — reset mínimo, tipografía y layout responsive */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--papel);
+  color: var(--tinta);
+  font-family: 'IBM Plex Sans', 'Segoe UI', sans-serif;
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+h1,
+h2,
+h3 {
+  font-family: 'Bricolage Grotesque', 'Segoe UI Semibold', 'Segoe UI', system-ui, sans-serif;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+/* el cursor es una aguja: el mouse cose la gran tela (solo puntero fino) */
+@media (pointer: fine) {
+  body {
+    cursor:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28'><line x1='3' y1='3' x2='19' y2='19' stroke='%23221A12' stroke-width='2.5' stroke-linecap='round'/><circle cx='21' cy='21' r='2.6' fill='none' stroke='%23221A12' stroke-width='1.8'/><path d='M23 23Q27 25 25.5 27.5' fill='none' stroke='%23FF5B35' stroke-width='1.6' stroke-linecap='round'/></svg>")
+        3 3,
+      auto;
+  }
+
+  a,
+  button {
+    cursor: pointer; /* los clickeables conservan la manito */
+  }
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* la gran tela: trama tejida (hilos vertical/horizontal) + grano de la identidad */
+.grain {
+  background-image:
+    repeating-linear-gradient(0deg, rgba(34, 26, 18, 0.03) 0 1px, transparent 1px 4px),
+    repeating-linear-gradient(90deg, rgba(34, 26, 18, 0.03) 0 1px, transparent 1px 4px),
+    radial-gradient(rgba(34, 26, 18, 0.05) 1px, transparent 1px),
+    radial-gradient(rgba(34, 26, 18, 0.04) 1px, transparent 1px);
+  background-size:
+    4px 4px,
+    4px 4px,
+    3px 3px,
+    5px 5px;
+  background-position:
+    0 0,
+    0 0,
+    0 0,
+    2px 2px;
+}
+
+.wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: clamp(24px, 5vw, 56px) clamp(20px, 5vw, 64px) clamp(48px, 7vw, 80px);
+}
+
+main {
+  margin-top: clamp(48px, 7vw, 72px);
+}
+
+section {
+  margin-bottom: clamp(48px, 7vw, 72px);
+  scroll-margin-top: 24px;
+}
+
+h2.section-title {
+  font-size: clamp(18px, 2.5vw, 22px);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0 0 18px;
+  padding-top: 4px;
+  font-family: 'IBM Plex Mono', 'Cascadia Code', Consolas, monospace;
+}
+
+h2.section-title::before {
+  content: '// ';
+  color: var(--ember);
+}
+
+.meta-mono {
+  font-family: 'IBM Plex Mono', 'Cascadia Code', Consolas, monospace;
+  font-size: 15px;
+  color: var(--tinta);
+  opacity: 0.65;
+}

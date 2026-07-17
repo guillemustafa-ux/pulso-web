@@ -1,0 +1,13 @@
+/* Tokens de identidad PULSO — fuente: pulso-marca/design/identidad-visual-pulso.html */
+:root {
+  --papel: #f3ecdd;
+  --tinta: #221a12;
+  --oscuro: #211911;
+  --crema: #f3ecdd;
+  --ember: #ff5b35;
+  --mostaza: #f2b705;
+  --exchange: #1ecbc0;
+  --verde: #8bc061; /* retazo verde claro — junto a ember y mostaza, los colores de "lo que se está haciendo" */
+  --ocre: #e09a4a; /* naranja/ocre — tinte de tela para tarjetas terminadas, pedido de Guille 16/07 */
+  --borde: rgba(34, 26, 18, 0.16);
+}

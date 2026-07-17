@@ -1,0 +1,659 @@
+/* Componentes — clases portadas de identidad-visual-pulso.html + capa responsive del sitio */
+
+/* ===== Latido (única animación del sitio: el trazo se dibuja una vez al cargar) ===== */
+.latido-animado path {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: latir 0.8s ease-out 0.2s forwards;
+}
+
+@keyframes latir {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .latido-animado path {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+}
+
+/* ===== Hero / wordmark ===== */
+/* el hero vive cerca del medio de la pantalla, no pegado arriba (pedido Guille 16/07) */
+.hero-zona {
+  min-height: clamp(420px, 66vh, 760px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+header.hero {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: clamp(24px, 4vw, 40px);
+  border-bottom: 2px solid var(--tinta);
+  margin-bottom: clamp(24px, 4vw, 40px);
+  flex-wrap: wrap;
+}
+
+.hero-brand {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 24px;
+}
+
+.wordmark {
+  position: relative;
+  display: inline-block;
+  font-size: clamp(56px, 14vw, 96px);
+  line-height: 1;
+}
+
+.wordmark span {
+  font-family: 'Bricolage Grotesque', 'Segoe UI Semibold', 'Segoe UI', system-ui, sans-serif;
+  font-size: 1em;
+  font-weight: 800;
+  letter-spacing: -0.031em; /* -3px a 96px, escala con el clamp */
+  line-height: 1;
+  text-transform: lowercase;
+  color: var(--tinta);
+}
+
+/* posición calibrada en em sobre las letras "ul" (96px → left:96 top:26 w:150 h:50) */
+.pulse-overlay {
+  position: absolute;
+  left: 1em;
+  top: 0.27em;
+  width: 1.5625em;
+  height: 0.52em;
+}
+
+.tagline-manual {
+  font-family: 'Caveat', 'Segoe Script', 'Segoe Print', cursive;
+  color: var(--ember);
+  font-size: clamp(24px, 4vw, 30px);
+  font-weight: 600;
+  transform: rotate(-3deg);
+}
+
+.hero-meta {
+  text-align: right;
+}
+
+.hero-bio {
+  font-size: clamp(17px, 2.2vw, 19px);
+  max-width: 640px;
+  margin: 0 0 20px;
+}
+
+nav.ancla a {
+  font-family: 'IBM Plex Mono', 'Cascadia Code', Consolas, monospace;
+  font-size: 14px;
+  text-decoration: none;
+  margin-right: 22px;
+  border-bottom: 2px solid transparent;
+  padding-bottom: 2px;
+}
+
+nav.ancla a::before {
+  content: '#';
+  color: var(--ember);
+}
+
+nav.ancla a:hover {
+  border-bottom-color: var(--ember);
+}
+
+/* ===== Manifiesto ===== */
+.manifiesto {
+  max-width: 680px;
+}
+
+.manifiesto p {
+  margin: 0 0 1em;
+}
+
+.manifiesto p:first-of-type {
+  font-family: 'Bricolage Grotesque', 'Segoe UI Semibold', 'Segoe UI', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: clamp(20px, 3vw, 24px);
+  line-height: 1.4;
+}
+
+.firma-manual {
+  font-family: 'Caveat', 'Segoe Script', 'Segoe Print', cursive;
+  color: var(--ember);
+  font-size: 28px;
+  font-weight: 600;
+  transform: rotate(-2deg);
+  display: inline-block;
+  margin-top: 8px;
+}
+
+/* ===== Tipografía escrita de las descripciones (Shantell Sans) ===== */
+.hero-bio,
+.manifiesto p:not(:first-of-type),
+.proyecto-card .descripcion,
+.card .cuerpo p,
+footer.cierre p {
+  font-family: 'Shantell Sans', 'Segoe Print', 'Segoe Script', cursive;
+  font-weight: 400;
+  line-height: 1.65;
+}
+
+/* ===== Proyectos ("lo que está latiendo") — colgados de un hilo de sisal ===== */
+.hilo-sisal {
+  display: block;
+  width: 100%;
+  height: 26px;
+  margin-bottom: -10px;
+}
+
+.proyectos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+  gap: 28px 20px;
+  padding-top: 18px;
+}
+
+.proyecto-card {
+  position: relative;
+  border: 1px solid var(--borde);
+  border-radius: 10px;
+  padding: 22px 24px;
+  background: rgba(255, 255, 255, 0.35);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* colgadas: leve rotación alternada (en var para poder balancearlas al hover) */
+.proyectos-grid > .proyecto-card:nth-child(odd) {
+  --rot: -1.1deg;
+}
+
+.proyectos-grid > .proyecto-card:nth-child(even) {
+  --rot: 0.9deg;
+}
+
+.proyecto-card {
+  transform: rotate(var(--rot, 0deg));
+  transform-origin: 50% -20px; /* pivotea desde donde agarra el hilo */
+}
+
+/* al pasar el mouse, la muestra se hamaca como tocada con el dedo */
+.proyecto-card:hover {
+  animation: balanceo 1.1s ease-in-out;
+}
+
+@keyframes balanceo {
+  0%,
+  100% {
+    transform: rotate(var(--rot, 0deg));
+  }
+  30% {
+    transform: rotate(calc(var(--rot, 0deg) + 2.2deg));
+  }
+  60% {
+    transform: rotate(calc(var(--rot, 0deg) - 1.4deg));
+  }
+  80% {
+    transform: rotate(calc(var(--rot, 0deg) + 0.6deg));
+  }
+}
+
+/* alfiler (trabajos terminados) y brochecito (muestras en proceso) */
+.alfiler {
+  position: absolute;
+  top: -16px;
+  left: 50%;
+  width: 24px;
+  height: 34px;
+  transform: translateX(-50%) rotate(8deg);
+  z-index: 2;
+}
+
+.broche {
+  position: absolute;
+  top: -22px;
+  left: 50%;
+  width: 20px;
+  height: 40px;
+  transform: translateX(-50%) rotate(-4deg);
+  z-index: 2;
+}
+
+/* muestra de tela: retazo de color con trama y costura */
+.proyecto-card.retazo {
+  border: 2px dashed rgba(34, 26, 18, 0.45);
+  border-radius: 6px;
+  background-image:
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.16) 0 2px, transparent 2px 5px),
+    repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.12) 0 2px, transparent 2px 5px);
+}
+
+.proyecto-card.retazo-mostaza {
+  background-color: var(--mostaza);
+}
+
+.proyecto-card.retazo-verde {
+  background-color: var(--verde);
+}
+
+.tag-costura {
+  align-self: flex-start;
+  font-family: 'IBM Plex Mono', 'Cascadia Code', Consolas, monospace;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border: 1.5px dashed rgba(34, 26, 18, 0.5);
+  border-radius: 3px;
+  background: rgba(243, 236, 221, 0.6);
+  transform: rotate(-2deg);
+}
+
+/* trabajo terminado: prisma más detallado */
+.proyecto-card.terminado {
+  border: 1px solid rgba(34, 26, 18, 0.3);
+  background: rgba(255, 255, 255, 0.55);
+  box-shadow: 0 2px 0 rgba(34, 26, 18, 0.12);
+}
+
+/* tela teñida: terminado con color de paleta, sin perder el marco pulido */
+.proyecto-card.terminado.tinte-ocre {
+  background: var(--ocre);
+  background-image:
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.14) 0 2px, transparent 2px 5px),
+    repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.1) 0 2px, transparent 2px 5px);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip {
+  font-family: 'IBM Plex Mono', 'Cascadia Code', Consolas, monospace;
+  font-size: 11px;
+  border: 1px solid var(--borde);
+  border-radius: 3px;
+  padding: 2px 8px;
+  background: rgba(243, 236, 221, 0.7);
+}
+
+.estado-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: 'IBM Plex Mono', 'Cascadia Code', Consolas, monospace;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.estado-live .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--verde);
+}
+
+.proyecto-card h3 {
+  font-weight: 800;
+  font-size: 24px;
+  letter-spacing: -0.5px;
+}
+
+.proyecto-card .descripcion {
+  margin: 0;
+  font-size: 15.5px;
+  flex: 1;
+}
+
+.proyecto-card .estado {
+  font-family: 'IBM Plex Mono', 'Cascadia Code', Consolas, monospace;
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.proyecto-card .link-vivo {
+  font-family: 'IBM Plex Mono', 'Cascadia Code', Consolas, monospace;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ember);
+  text-decoration: none;
+  align-self: flex-start;
+}
+
+.proyecto-card .link-vivo:hover {
+  text-decoration: underline;
+}
+
+/* lockup "PULSO · de X" (sistema de hijas) */
+.lockup {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.lockup .marca {
+  font-family: 'IBM Plex Mono', 'Cascadia Code', Consolas, monospace;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--ember);
+  font-size: 14px;
+}
+
+.lockup .dot {
+  color: var(--ember);
+  font-weight: 700;
+}
+
+.lockup .hija {
+  font-family: 'Bricolage Grotesque', 'Segoe UI Semibold', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--tinta);
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--tinta);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-family: 'IBM Plex Mono', 'Cascadia Code', Consolas, monospace;
+  font-size: 12px;
+  align-self: flex-start;
+}
+
+/* único lugar del sitio donde aparece el turquesa de Exchange */
+.founder-strip {
+  height: 3px;
+  width: 60%;
+  background: var(--exchange);
+  border-radius: 2px;
+}
+
+/* ===== Bitácora — tarjetas hito / proceso / resultado ===== */
+.feed-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+  gap: 20px;
+}
+
+.card {
+  border-radius: 2px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.card .h-meta {
+  font-family: 'IBM Plex Mono', 'Cascadia Code', Consolas, monospace;
+  font-size: 12px;
+  opacity: 0.7;
+  margin-top: auto;
+}
+
+.card .cuerpo p {
+  margin: 0 0 0.8em;
+  font-size: 15.5px;
+}
+
+.card .cuerpo p:last-child {
+  margin-bottom: 0;
+}
+
+.card.hito {
+  background: var(--papel);
+  border: 1px solid var(--borde);
+  padding: 22px;
+}
+
+.card.hito .h-title {
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.5px;
+}
+
+.card.hito .h-tag {
+  align-self: flex-start;
+  font-family: 'IBM Plex Mono', 'Cascadia Code', Consolas, monospace;
+  font-size: 11px;
+  background: var(--tinta);
+  color: var(--papel);
+  padding: 3px 8px;
+  border-radius: 3px;
+}
+
+.card.proceso {
+  background: var(--oscuro);
+  padding: 18px;
+  color: var(--crema);
+}
+
+.card.proceso .h-meta {
+  color: var(--crema);
+}
+
+.card.proceso .term {
+  background: #151009;
+  border: 1px solid rgba(243, 236, 221, 0.15);
+  border-radius: 4px;
+  padding: 12px;
+  font-family: 'IBM Plex Mono', 'Cascadia Code', Consolas, monospace;
+  font-size: 13px;
+  color: #9fe3a0;
+  white-space: pre-wrap;
+  margin: 0;
+}
+
+.card.proceso .term .err {
+  color: #ff6b5e;
+}
+
+.annot {
+  font-family: 'Caveat', 'Segoe Script', cursive;
+  color: var(--ember);
+  font-size: 24px;
+  font-weight: 600;
+  transform: rotate(-2deg);
+  display: inline-block;
+}
+
+.card.resultado {
+  background: var(--papel);
+  border: 1px solid var(--borde);
+  padding: 0;
+}
+
+.card.resultado .photo {
+  width: 100%;
+  object-fit: cover;
+  aspect-ratio: 16 / 10;
+}
+
+.card.resultado .band {
+  background: var(--oscuro);
+  padding: 10px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card.resultado .band .name {
+  font-family: 'IBM Plex Mono', 'Cascadia Code', Consolas, monospace;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--crema);
+}
+
+.card.resultado .cuerpo,
+.card.resultado .h-meta {
+  padding: 0 18px;
+}
+
+.card.resultado .h-meta {
+  padding-bottom: 18px;
+}
+
+.mini-pulse {
+  width: 34px;
+  height: 16px;
+  flex: none;
+}
+
+/* ===== Footer ===== */
+footer.cierre {
+  background: var(--oscuro);
+  color: var(--crema);
+}
+
+footer.cierre .wrap {
+  padding-top: clamp(36px, 5vw, 56px);
+  padding-bottom: clamp(36px, 5vw, 56px);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+footer.cierre .cta-ig {
+  font-family: 'IBM Plex Mono', 'Cascadia Code', Consolas, monospace;
+  font-size: clamp(16px, 2.5vw, 20px);
+  font-weight: 700;
+  color: var(--ember);
+  text-decoration: none;
+}
+
+footer.cierre .cta-ig:hover {
+  text-decoration: underline;
+}
+
+footer.cierre .meta-mono {
+  color: var(--crema);
+}
+
+/* CTA "dejá tu mail" — costura sobre el fondo café */
+.mail-cta {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+  max-width: 460px;
+  width: 100%;
+}
+
+.mail-cta label {
+  font-family: 'Shantell Sans', 'Segoe Print', 'Segoe Script', cursive;
+  font-size: 16px;
+}
+
+.mail-cta-fila {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.mail-cta input {
+  flex: 1;
+  min-width: 200px;
+  background: transparent;
+  border: 1.5px dashed rgba(243, 236, 221, 0.5);
+  border-radius: 4px;
+  padding: 10px 12px;
+  color: var(--crema);
+  font-family: 'IBM Plex Mono', 'Cascadia Code', Consolas, monospace;
+  font-size: 14px;
+}
+
+.mail-cta input::placeholder {
+  color: rgba(243, 236, 221, 0.45);
+}
+
+.mail-cta input:focus {
+  outline: none;
+  border-color: var(--ember);
+  border-style: solid;
+}
+
+.mail-cta button {
+  background: var(--ember);
+  color: var(--crema);
+  border: none;
+  border-radius: 4px;
+  padding: 10px 18px;
+  font-family: 'IBM Plex Mono', 'Cascadia Code', Consolas, monospace;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.mail-cta button:disabled {
+  opacity: 0.6;
+}
+
+.mail-cta-nota {
+  font-family: 'IBM Plex Mono', 'Cascadia Code', Consolas, monospace;
+  font-size: 12px;
+  opacity: 0.65;
+}
+
+.mail-cta-ok {
+  font-family: 'Caveat', 'Segoe Script', 'Segoe Print', cursive;
+  color: var(--ember);
+  font-size: 24px;
+  font-weight: 600;
+  transform: rotate(-2deg);
+  margin: 8px 0 0;
+}
+
+/* ===== Movimiento v2.1 — apariciones/desapariciones al scrollear ===== */
+/* usa translate (no transform) para no pisar la rotación de las colgadas */
+.reveal {
+  opacity: 0;
+  translate: 0 18px;
+  transition:
+    opacity 0.6s ease,
+    translate 0.6s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  translate: 0 0;
+}
+
+/* ===== Cursor aguja: canvas de puntadas que sigue al mouse ===== */
+.hilo-cursor {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 60;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    translate: none;
+    transition: none;
+  }
+
+  .proyecto-card:hover {
+    animation: none;
+  }
+
+  .hilo-cursor {
+    display: none;
+  }
+}

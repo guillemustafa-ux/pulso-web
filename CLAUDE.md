@@ -80,6 +80,29 @@ si se consolidan, actualizar allá también.
 desktop (1280) + mobile (390). Chequear siempre: latido clavado sobre "ul", turquesa solo bajo
 "nació en pulso", anclas #manifiesto/#latiendo/#bitacora.
 
+## v2.2 — el atril, el muro y el latido vivo (17/07/2026)
+
+- **Atril** (`Atril.tsx`, fijo arriba a la derecha): abre el lienzo y presta el pincel.
+  Ajustes compartidos en `src/lib/pincel.tsx` (paleta sin turquesa, grosores, tramas
+  sólido/seco/tela).
+- **Lienzo** (`LienzoModal.tsx`): el visitante dibuja/escribe y "cuelga en el muro".
+  Cupo 3 huellas/día por navegador (localStorage).
+- **Muro** (`Muro.tsx` + `api/huellas.ts` + `api/borrar.ts`, Vercel Blob store
+  `pulso-huellas`): huellas EN VIVO, muestra las últimas 12, todas quedan archivadas por
+  fecha para el compilado semanal/mensual (flujo: cronista → guardián → Guille).
+  Salvaguardas del guardián (17/07): disclaimer publicado junto al muro, espacio rotulado
+  de visitantes, borrado inmediato de lo que no va (datos de clientes, hype financiero,
+  cruces de facetas, odio/spam), revisión 2 veces por día — si no hay guardia, se pausa el
+  muro; una huella suelta nunca se repostea fuera del compilado.
+  **Admin**: entrar a la web con `?llave=<token>` muestra la ✕ de borrado en cada huella.
+  El token vive en `.llave-muro.txt` (gitignoreado) y en la env `MURO_ADMIN_TOKEN` de Vercel.
+- **Modo pincel** (`PincelCapa.tsx`): pinta la página; la tela tiene memoria caprichosa —
+  la mayoría de los gestos se desvanecen en ~40s, ~3 de 10 quedan marcados para siempre
+  (localStorage del visitante, clave `pulso-tela-marcas`).
+- **Latido vivo** (`Latido.tsx` con `animado`): nunca se queda quieto; su TEMPO sigue la
+  actividad del visitante (2.4s en reposo → 0.55s a full). La aguja descansa mientras el
+  pincel está activo.
+
 ## Deploy (17/07/2026)
 
 - Repo público: `https://github.com/guillemustafa-ux/pulso-web` (build in public).

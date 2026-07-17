@@ -80,12 +80,25 @@ si se consolidan, actualizar allá también.
 desktop (1280) + mobile (390). Chequear siempre: latido clavado sobre "ul", turquesa solo bajo
 "nació en pulso", anclas #manifiesto/#latiendo/#bitacora.
 
+## Deploy (17/07/2026)
+
+- Repo público: `https://github.com/guillemustafa-ux/pulso-web` (build in public).
+- Producción en Vercel (proyecto `pulso-web`, deploy vía CLI — un push NO redeploya solo,
+  correr `vercel --prod` tras cada cambio): **https://pulso-envozalta.vercel.app** (og:url ya
+  apunta ahí).
+- Footer con CTA "dejá tu mail" (`MailCTA.tsx`, FormSubmit) + copy propio en "vos" singular,
+  ambos dictaminados aptos por el guardián el 17/07.
+
 ## Pendientes
 
-1. OK visual final de Guille → crear repo GitHub + importar en Vercel.
-2. Al tener URL definitiva: agregar `og:url` en index.html y redeploy.
-3. Si la dirección de arte v2/v2.1 queda firme: registrarla en pulso-marca/IDENTIDAD.md.
-4. Decisión de Guille pendiente: ¿renombrar la tarjeta "aa smart wallet" a algo menos críptico?
+1. Guille: pegar la URL en la bio de IG (@pulso.envozalta) — reemplaza el link a Exchange.
+2. FormSubmit: al llegar el primer mail, activar la cuenta y reemplazar el mail plano del
+   endpoint en `MailCTA.tsx` por el alias random que dan (no dejar el Gmail expuesto).
+3. Manifiesto v2 en afirmativo/hospitalidad: versiones A y B de voz-de-marca entregadas,
+   falta elección de Guille → dictamen del guardián → actualizar VOZ.md §1 + Manifiesto.tsx
+   (+ opcional editar caption del post #1 en IG).
+4. Si la dirección de arte v2/v2.1 queda firme: registrarla en pulso-marca/IDENTIDAD.md.
+5. Decisión de Guille pendiente: ¿renombrar la tarjeta "aa smart wallet" a algo menos críptico?
 
 Dictamen del guardian-de-marca (17/07): copy APTO para deploy con correcciones YA aplicadas
 en `proyectos.ts` (Exchange: evidencia en vez de promesa de Play; ulises deco: sin deficit

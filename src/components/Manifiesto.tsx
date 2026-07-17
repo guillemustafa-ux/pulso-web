@@ -1,32 +1,30 @@
-// Manifiesto fundacional — texto literal de pulso-marca/VOZ.md §1, cero reescritura
+// Manifiesto — texto literal de pulso-marca/VOZ.md §1 (v2 del 17/07), cero reescritura
 export default function Manifiesto() {
   return (
     <section id="manifiesto">
       <h2 className="section-title">Manifiesto</h2>
       <div className="manifiesto reveal">
         <p>
-          No espero a que un proyecto esté terminado para mostrarlo. Lo muestro mientras se rompe,
-          mientras lo arreglo, mientras anda por primera vez.
+          Esto es Pulso: mi taller con la puerta abierta. Comparto mis proyectos como están en
+          este momento — mientras se rompen, mientras los arreglo, mientras arrancan por primera
+          vez.
         </p>
         <p>
-          Esto es Pulso: mi bitácora de todo lo que construyo. Un exchange que no es exchange
-          todavía. Un bot que manda alertas a las seis de la mañana. Un sistema que le sirve a otra
-          persona antes de servirme la gloria a mí.
+          Acá vas a ver todo lo que ando construyendo: un exchange que todavía no es exchange, un
+          bot que manda alertas a las seis de la mañana, un sistema pensado para servirle a otra
+          persona antes que a mi propio ego. Te lo cuento como se lo contaría a un amigo.
         </p>
         <p>
-          Lo construyo con un equipo de agentes de IA. No lo escondo — es parte de cómo laburo hoy,
-          y me parece que esconderlo sería mentirles.
+          Trabajo con un equipo agéntico de IA completo. Lo digo sin vueltas, lo reivindico y lo
+          muestro sin problemas: es como laburo hoy en día.
         </p>
+        <p>Cuento lo que pasa tal cual: si el deploy falla, y cuando vuelve a andar.</p>
         <p>
-          Acá no hay case study pulido ni promesa de que esto te va a hacer ganar guita. Hay el
-          deploy que falló tres veces antes de andar, y la vez que sí andó.
+          Esto es Pulso: una pasión creativa, un deseo canalizado, el latir presente de lo que se
+          va construyendo. Ahora sí — con tu devo, tu comentario, tu opinión, tu huella. Ahí es
+          donde se completa el ciclo.
         </p>
-        <p>
-          Si estás armando lo tuyo — una app, un changuito de código, un negocio, lo que sea — esto
-          también es tuyo. Comentá, preguntá, metan mano.
-        </p>
-        <p>Bienvenidos a Pulso. El latido de lo que estoy construyendo, todos los días.</p>
-        <div className="meta-mono">14/07 · día uno · pulso</div>
+        <div className="meta-mono">día uno 14/07 · manifiesto v2 17/07 · pulso</div>
       </div>
     </section>
   );
